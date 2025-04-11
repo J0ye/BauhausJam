@@ -7,7 +7,7 @@ public class AssemblyLineManager : MonoBehaviour
 {
     private float legAmount = 0;
     private Dictionary<string, float> bodyPartData = new Dictionary<string, float>();
-    public GameObject currentBuildingBlock;
+    public BasicBodyPart currentBuildingBlock;
 
 
     public static AssemblyLineManager instance;
@@ -28,7 +28,7 @@ public class AssemblyLineManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-            
+
     }
 
     public void SetBodyPartDate(string bodyPart, float amount)
@@ -39,11 +39,11 @@ public class AssemblyLineManager : MonoBehaviour
         }
     }
 
-    public void CreateBodyPart ()
+    public void CreateBodyPart()
     {
-        foreach(KeyValuePair<string, float> entry in bodyPartData) {
-        
-            
+        foreach (KeyValuePair<string, float> entry in bodyPartData)
+        {
+            currentBuildingBlock.SwitchBodyPartAmount(entry.Key,entry.Value);
         }
     }
 }
