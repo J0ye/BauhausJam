@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using UnityEditor;
 using UnityEngine;
 
 
@@ -9,13 +10,14 @@ public class AssemblyLineManager : MonoBehaviour
     private float legAmount = 0;
     private Dictionary<string, SwitchData> bodyPartData = new Dictionary<string, SwitchData>();
     public GameObject bodyPartPrefab;
-    public BasicBodyPart currentBuildingBlock {  get; private set; }
+    public BasicBodyPart currentBuildingBlock { get; private set; }
     public List<string> bodyParts = new List<string>();
 
     public List<Transform> endPoints = new List<Transform>();
     public List<GameObject> existingBodys = new List<GameObject>();
 
     private BasicState currentState;
+    public BasicState CurrentState { get { return currentState; } }
 
 
     public static AssemblyLineManager instance;
@@ -34,7 +36,7 @@ public class AssemblyLineManager : MonoBehaviour
         currentState = new Setup(this);
         currentState.Enter();
 
-        foreach(string part in bodyParts)
+        foreach (string part in bodyParts)
         {
             bodyPartData.Add(part, new SwitchData());
         }
@@ -63,14 +65,15 @@ public class AssemblyLineManager : MonoBehaviour
     {
         foreach (KeyValuePair<string, SwitchData> entry in bodyPartData)
         {
-            currentBuildingBlock.SwitchBodyPartAmount(entry.Key,entry.Value);
+            currentBuildingBlock.SwitchBodyPartAmount(entry.Key, entry.Value);
             print($"Switching: {entry.Key} to {entry.Value}");
         }
     }
 
     public void GoToState(string stateName)
     {
-        if (currentState.stateName != stateName) { 
+        if (currentState.stateName != stateName)
+        {
             switch (stateName.ToLower())
             {
                 case "setup":
@@ -100,3 +103,27 @@ public class AssemblyLineManager : MonoBehaviour
         currentBuildingBlock = Instantiate(bodyPartPrefab, bodyPartPrefab.transform.position, bodyPartPrefab.transform.rotation).GetComponent<BasicBodyPart>();
     }
 }
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(AssemblyLineManager))]
+public class MyComponentEditor : Editor
+{
+
+    public override void OnInspectorGUI()
+    {
+        AssemblyLineManager myComponent = (AssemblyLineManager)target;
+
+        // Draw a text field in the inspector
+        if (myComponent.CurrentState != null)
+        {
+            EditorGUILayout.TextArea(myComponent.CurrentState.stateName);
+        }
+        else
+        {
+            EditorGUILayout.TextArea("State", "Enter play modus");
+        }
+
+        DrawDefaultInspector();
+    }
+}
+#endif
