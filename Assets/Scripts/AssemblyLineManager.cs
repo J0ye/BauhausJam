@@ -8,10 +8,12 @@ public class AssemblyLineManager : MonoBehaviour
 {
     private float legAmount = 0;
     private Dictionary<string, SwitchData> bodyPartData = new Dictionary<string, SwitchData>();
-    public BasicBodyPart currentBuildingBlock;
+    public GameObject bodyPartPrefab;
+    public BasicBodyPart currentBuildingBlock {  get; private set; }
     public List<string> bodyParts = new List<string>();
 
-    
+    public List<Transform> endPoints = new List<Transform>();
+    public List<GameObject> existingBodys = new List<GameObject>();
 
     private BasicState currentState;
 
@@ -66,7 +68,7 @@ public class AssemblyLineManager : MonoBehaviour
         }
     }
 
-    public void GoTo(string stateName)
+    public void GoToState(string stateName)
     {
         if (currentState.stateName != stateName) { 
             switch (stateName.ToLower())
@@ -91,5 +93,10 @@ public class AssemblyLineManager : MonoBehaviour
         currentState.Exit();
         currentState = bs;
         currentState.Enter();
+    }
+
+    public void PrepNewBody()
+    {
+        currentBuildingBlock = Instantiate(bodyPartPrefab, bodyPartPrefab.transform.position, bodyPartPrefab.transform.rotation).GetComponent<BasicBodyPart>();
     }
 }

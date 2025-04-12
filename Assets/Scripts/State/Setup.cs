@@ -8,5 +8,8 @@ public class Setup : BasicState
     {
         stateName = nameof(Setup);
     }
-
+    public override void Enter()
+    {
+        assemblyLineManager.PrepNewBody();
+    }
 }
