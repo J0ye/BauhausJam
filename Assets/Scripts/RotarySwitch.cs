@@ -43,6 +43,4 @@ public class RotarySwitch : BasicSwitch
 
         onRotate.Invoke(data);
     }
-
-
 }
