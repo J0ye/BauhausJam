@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Globalization;
 using UnityEditor;
 using UnityEngine;
@@ -17,7 +19,7 @@ public class AssemblyLineManager : MonoBehaviour
     public Transform endPoint;
     public BodyPartStep step = BodyPartStep.Head;
 
-    private Dictionary<string, SwitchData> bodyPartData = new Dictionary<string, SwitchData>();
+    private List<SwitchData> bodyPartData = new List<SwitchData>();
     
     public BasicState CurrentState { get { return currentState; } }
     private BasicState currentState;
@@ -26,11 +28,11 @@ public class AssemblyLineManager : MonoBehaviour
     public static AssemblyLineManager instance;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         if (instance == null)
         {
-            instance = new AssemblyLineManager();
+            instance = this;
         }
         else
         {
@@ -38,38 +40,39 @@ public class AssemblyLineManager : MonoBehaviour
         }
         currentState = new Setup(this);
         currentState.Enter();
-
-        FillBodyDictionary();
+        print("in manager " + bodyParts.Count);
+        FillBodyList();
     }
 
     public void SetBodyPartDate(SwitchData dataIn)
     {
-        if (bodyPartData.ContainsKey(dataIn.bodyPart) && currentState.stateName.ToLower() == dataIn.allowedState.ToLower())
+        for (int i = 0; i < bodyPartData.Count; i++)
         {
-            bodyPartData[dataIn.bodyPart] = dataIn;
+            if (string.Equals(bodyPartData[i].bodyPart, dataIn.bodyPart, StringComparison.OrdinalIgnoreCase))
+            {
+                bodyPartData[i] = dataIn;
+                break; // Exit early. Only one match expected
+            }
         }
-        //Muss wieder RAUS
-        //CreateBodyPart();
     }
 
     public void CreateBodyPart()
     {
-        foreach (KeyValuePair<string, SwitchData> entry in bodyPartData)
+        foreach (SwitchData entry in bodyPartData)
         {
-            bool isMainBodyPart = entry.Value.bodyPart.ToLower() == "head"
-                || entry.Value.bodyPart.ToLower() == "tail"
-                || entry.Value.bodyPart.ToLower() == "body";
-            print(entry.Value.buttonData);
-            if ((!isMainBodyPart && entry.Value.buttonData != 0) || entry.Value.bodyPart.ToLower() == step.ToString().ToLower())
+            bool isMainBodyPart = entry.bodyPart.ToLower() == "head"
+                || entry.bodyPart.ToLower() == "tail"
+                || entry.bodyPart.ToLower() == "body";
+            
+            if ((!isMainBodyPart && entry.buttonData != 0) || entry.bodyPart.ToLower() == step.ToString().ToLower())
             {
-                print("here");
                 if(!isMainBodyPart)
                 {
-                    entry.Value.buttonData--;
+                    entry.buttonData--;
                 }
-                if (entry.Value.allowedBodyPartStep == step)
+                if (entry.allowedBodyPartStep == step)
                 {
-                    currentBuildingBlock.SwitchBodyPartAmount(entry.Key, entry.Value);
+                    currentBuildingBlock.SwitchBodyPartAmount(entry);
                 }
             }
         }
@@ -102,7 +105,7 @@ public class AssemblyLineManager : MonoBehaviour
 
     public void ResetMachine()
     {
-        FillBodyDictionary();
+        FillBodyList();
         BasicSwitch.ResetSwitches();
     }
 
@@ -148,7 +151,7 @@ public class AssemblyLineManager : MonoBehaviour
         currentState.Enter();
     }
 
-    protected void FillBodyDictionary()
+    protected void FillBodyList()
     {
         bodyPartData.Clear();
         foreach (string part in bodyParts)
@@ -157,7 +160,7 @@ public class AssemblyLineManager : MonoBehaviour
             temp.singleSelection = true;
             temp.bodyPart = part;
             temp.allowedState = "setup";
-            bodyPartData.Add(part, temp);
+            bodyPartData.Add(temp);
         }
     }
 }

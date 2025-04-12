@@ -1,54 +1,44 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class BasicBodyPart : MonoBehaviour
 {
+    public static List<GameObject> BodyParts {  get; private set; }
+
     public List<GameObject> bodyParts = new List<GameObject>();
     public Dictionary<string, GameObject> bodyPartsAndNames = new Dictionary<string, GameObject>();
 
-
-    // Start is called before the first frame update
     void Start()
     {
-        foreach (GameObject gameObject in bodyParts)
-        {
-            bodyPartsAndNames[gameObject.name] = gameObject;
-        }
+        BodyParts = bodyParts;
     }
 
     public void SwitchBodyPart(string partName, bool newState)
     {
-        if (bodyPartsAndNames.ContainsKey(partName))
+        foreach (GameObject gameObject in bodyParts)
         {
-            bodyPartsAndNames[partName].SetActive(newState);
+            if (gameObject.name == partName)
+            {
+                gameObject.SetActive(newState);
+            }
         }
     }
 
-    public void SwitchBodyPartAmount(string bodyPart, SwitchData value)
+    public void SwitchBodyPartAmount(SwitchData value)
     {
-        print($"Switch request for {bodyPart} with data " +
-            $"(bp:{value.bodyPart}, data:{value.buttonData}, target state:{value.allowedState}, single {value.singleSelection.ToString()} )");
-        List<GameObject> list = new List<GameObject>();
-        foreach (KeyValuePair<string, GameObject> pair in bodyPartsAndNames)
-        {
-            if (pair.Key.ToLower().Contains(bodyPart.ToLower()))
-            {
-                list.Add(pair.Value);
-            }
-        }
+        print($"Switch request for data (bp:{value.bodyPart}, data:{value.buttonData}, " +
+            $"target state:{value.allowedState}, single {value.singleSelection.ToString()} )");
 
+        List<GameObject> list = GetListOfParts(value.bodyPart);
 
         if (!value.singleSelection)
         {
             list.Shuffle();
         }
-        foreach (GameObject gameObject in list)
-        {
-            gameObject.SetActive(false);
-        }
-
-        value.buttonData = Mathf.Clamp(value.buttonData, 0, list.Count-1);
+        DeactivateAll();
+        value.buttonData = Mathf.Clamp(value.buttonData, 0, list.Count - 1);
 
 
         if (value.singleSelection)
@@ -61,6 +51,27 @@ public class BasicBodyPart : MonoBehaviour
             {
                 list[i].SetActive(true);
             }
+        }
+    }
+
+    public static List<GameObject> GetListOfParts(string bodyPartName)
+    {
+        List<GameObject> list = new List<GameObject>();
+        foreach (GameObject gbj in BodyParts)
+        {
+            if (gbj.name.ToLower().Contains(bodyPartName.ToLower()))
+            {
+                list.Add(gbj);
+            }
+        }
+        return list;
+    }
+
+    public void DeactivateAll()
+    {
+        foreach (Transform child in transform)
+        {
+            child.gameObject.SetActive(false);
         }
     }
 }
