@@ -1,13 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 
 public class AssemblyLineManager : MonoBehaviour
 {
     private float legAmount = 0;
-    private Dictionary<string, float> bodyPartData = new Dictionary<string, float>();
+    private Dictionary<string, SwitchData> bodyPartData = new Dictionary<string, SwitchData>();
     public BasicBodyPart currentBuildingBlock;
+    public List<string> bodyParts = new List<string>();
+
+    
+
+    private BasicState currentState;
 
 
     public static AssemblyLineManager instance;
@@ -23,6 +29,13 @@ public class AssemblyLineManager : MonoBehaviour
         {
             Destroy(this);
         }
+        currentState = new Setup(this);
+        currentState.Enter();
+
+        foreach(string part in bodyParts)
+        {
+            bodyPartData.Add(part, new SwitchData());
+        }
     }
 
     // Update is called once per frame
@@ -31,19 +44,52 @@ public class AssemblyLineManager : MonoBehaviour
 
     }
 
-    public void SetBodyPartDate(string bodyPart, float amount)
+    public void SetBodyPartDate(SwitchData dataIn)
     {
-        if (bodyPartData.ContainsKey(bodyPart))
+        if (bodyPartData.ContainsKey(dataIn.bodyPart) && currentState.stateName == dataIn.allowedState)
         {
-            bodyPartData[bodyPart] = amount;
+            bodyPartData[dataIn.bodyPart] = dataIn;
+            print("data set");
         }
+        Debug.Log("Recived:" + dataIn.bodyPart + dataIn.buttonData + dataIn.allowedState);
+        Debug.Log(currentState.stateName);
+        //Muss wieder RAUS
+        //CreateBodyPart();
     }
 
     public void CreateBodyPart()
     {
-        foreach (KeyValuePair<string, float> entry in bodyPartData)
+        foreach (KeyValuePair<string, SwitchData> entry in bodyPartData)
         {
             currentBuildingBlock.SwitchBodyPartAmount(entry.Key,entry.Value);
+            print($"Switching: {entry.Key} to {entry.Value}");
         }
+    }
+
+    public void GoTo(string stateName)
+    {
+        if (currentState.stateName != stateName) { 
+            switch (stateName.ToLower())
+            {
+                case "setup":
+                    ChangeState(new Setup(this));
+                    break;
+
+                case "working":
+                    ChangeState(new Working(this));
+                    break;
+
+                case "cleanup":
+                    ChangeState(new CleanUp(this));
+                    break;
+            }
+        }
+    }
+
+    protected void ChangeState(BasicState bs)
+    {
+        currentState.Exit();
+        currentState = bs;
+        currentState.Enter();
     }
 }

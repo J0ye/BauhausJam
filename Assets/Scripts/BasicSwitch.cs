@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 public class BasicSwitch : MonoBehaviour
 {
+    protected int clicktAmount = 1;
     public UnityEvent onClick = new UnityEvent();
     // Start is called before the first frame update
     void Start()
@@ -21,5 +22,6 @@ public class BasicSwitch : MonoBehaviour
     public void OnMouseDown()
     {
         onClick.Invoke();
+        clicktAmount++;
     }
 }

@@ -3,51 +3,76 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum BodyType {Head, Body, Tail };
+
 public class BasicBodyPart : MonoBehaviour
 {
-    public BodyType type;
-    public Dictionary<string, GameObject> bodyParts = new Dictionary<string, GameObject>();
+    public List<GameObject> bodyParts = new List<GameObject>();
+    public Dictionary<string, GameObject> bodyPartsAndNames = new Dictionary<string, GameObject>();
 
-    public void SwitchBodyPart(string partName, bool newState)
-    {
-        if(bodyParts.ContainsKey(partName))
-        {
-            bodyParts[partName].SetActive(newState);
-        }
-    }
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        foreach (GameObject gameObject in bodyParts)
+        {
+            bodyPartsAndNames[gameObject.name] = gameObject;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-
-    public void SwitchBodyPartAmount(string bodyPart, float value)
+    public void SwitchBodyPart(string partName, bool newState)
+    {
+        if (bodyPartsAndNames.ContainsKey(partName))
+        {
+            print($"Switching: {partName}");
+            bodyPartsAndNames[partName].SetActive(newState);
+        }
+    }
+    public void SwitchBodyPartAmount(string bodyPart, SwitchData value)
     {
         List<GameObject> list = new List<GameObject>();
-        foreach (KeyValuePair<string, GameObject> pair in bodyParts)
+        foreach (KeyValuePair<string, GameObject> pair in bodyPartsAndNames)
         {
-            if (pair.Key.ToLower().Contains(bodyPart))
+            print("Checking " + bodyPart.ToLower() + " with " + pair.Key.ToLower());
+            if (pair.Key.ToLower().Contains(bodyPart.ToLower()))
             {
                 list.Add(pair.Value);
             }
         }
 
-        list.Shuffle();
 
-        value = Mathf.Clamp(value, 0, list.Count);
-
-        for (int i = 0; i < value; i++)
+        if (!value.singleSelection)
         {
-            list[i].SetActive(true);
+            list.Shuffle();
         }
+        foreach (GameObject gameObject in list)
+        {
+            gameObject.SetActive(false);
+        }
+
+        value.buttonData = Mathf.Clamp(value.buttonData, 0, list.Count);
+
+        if (value.buttonData != 0)
+        {
+            if (value.singleSelection)
+            {
+                list[value.buttonData - 1].SetActive(true);
+            }
+            else
+            {
+                for (int i = 0; i < value.buttonData; i++)
+                {
+                    list[i].SetActive(true);
+                }
+            }
+        }
+
+
     }
 
 
@@ -61,7 +86,7 @@ public static class ListExtensions
         while (n > 1)
         {
             n--;
-            int k = Random.Range(0, n +1);
+            int k = Random.Range(0, n + 1);
             T value = list[k];
             list[k] = list[n];
             list[n] = value;
