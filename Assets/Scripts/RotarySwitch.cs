@@ -17,9 +17,7 @@ public class RotarySwitch : BasicSwitch
 
     public int turnAmount = 3;
 
-    public string bodyPartName = "";
-    public string allowedState = "";
-    public bool singleOn = false;
+    
 
     // Start is called before the first frame update
     void Start()

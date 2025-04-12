@@ -7,6 +7,10 @@ public class BasicSwitch : MonoBehaviour
 {
     protected int clicktAmount = 1;
     public UnityEvent onClick = new UnityEvent();
+
+    public string bodyPartName = "";
+    public string allowedState = "";
+    public bool singleOn = false;
     // Start is called before the first frame update
     void Start()
     {
