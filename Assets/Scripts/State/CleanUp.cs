@@ -14,9 +14,13 @@ public class CleanUp : BasicState
 
     public override void Enter()
     {
-        int i = assemblyLineManager.existingBodys.Count;
-        assemblyLineManager.currentBuildingBlock.transform.DOMove(assemblyLineManager.endPoints[i].position, 2f);
+        MoveCurrentBodyPart(assemblyLineManager.endPoint.position, 2f);
         assemblyLineManager.existingBodys.Add(assemblyLineManager.currentBuildingBlock.gameObject);
         assemblyLineManager.GoToState("Setup");
+    }
+
+    public override void Exit()
+    {
+        assemblyLineManager.GoToNextBodyPartStep();
     }
 }

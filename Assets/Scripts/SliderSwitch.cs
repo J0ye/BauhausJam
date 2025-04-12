@@ -20,8 +20,6 @@ public class SliderSwitch : BasicSwitch
         startPos = transform.position;
     }
 
-
-
     private void OnMouseDrag()
     {
         Vector3 mouseScreenPos = Input.mousePosition;
@@ -76,7 +74,6 @@ public class SliderSwitch : BasicSwitch
             counter++;
         }
 
-
         return ret;
     }
 
@@ -90,5 +87,11 @@ public class SliderSwitch : BasicSwitch
         data.singleSelection = singleOn;
 
         OnSlide.Invoke(data);
+    }
+
+    public override void Reset()
+    {
+        base.Reset();
+        transform.position = startPos; // Move back to where switch started
     }
 }

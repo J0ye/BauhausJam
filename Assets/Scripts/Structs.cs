@@ -17,6 +17,4 @@ public class SwitchData {
         allowedState = string.Empty;
         singleSelection = false;
     }
-    
-
 }

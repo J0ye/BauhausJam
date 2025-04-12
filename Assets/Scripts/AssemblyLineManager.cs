@@ -4,20 +4,23 @@ using System.Globalization;
 using UnityEditor;
 using UnityEngine;
 
+public enum BodyPartStep { Head, Tail, Body}
+
 
 public class AssemblyLineManager : MonoBehaviour
 {
-    private float legAmount = 0;
-    private Dictionary<string, SwitchData> bodyPartData = new Dictionary<string, SwitchData>();
     public GameObject bodyPartPrefab;
     public BasicBodyPart currentBuildingBlock { get; private set; }
-    public List<string> bodyParts = new List<string>();
-
-    public List<Transform> endPoints = new List<Transform>();
     public List<GameObject> existingBodys = new List<GameObject>();
+    public List<string> bodyParts = new List<string>();
+    public Transform inMachinePoint;
+    public Transform endPoint;
+    public BodyPartStep step = BodyPartStep.Head;
 
-    private BasicState currentState;
+    private Dictionary<string, SwitchData> bodyPartData = new Dictionary<string, SwitchData>();
+    
     public BasicState CurrentState { get { return currentState; } }
+    private BasicState currentState;
 
 
     public static AssemblyLineManager instance;
@@ -36,27 +39,15 @@ public class AssemblyLineManager : MonoBehaviour
         currentState = new Setup(this);
         currentState.Enter();
 
-        foreach (string part in bodyParts)
-        {
-            bodyPartData.Add(part, new SwitchData());
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        FillBodyDictionary();
     }
 
     public void SetBodyPartDate(SwitchData dataIn)
     {
-        if (bodyPartData.ContainsKey(dataIn.bodyPart) && currentState.stateName == dataIn.allowedState)
+        if (bodyPartData.ContainsKey(dataIn.bodyPart) && currentState.stateName.ToLower() == dataIn.allowedState.ToLower())
         {
             bodyPartData[dataIn.bodyPart] = dataIn;
-            print("data set");
         }
-        Debug.Log("Recived:" + dataIn.bodyPart + dataIn.buttonData + dataIn.allowedState);
-        Debug.Log(currentState.stateName);
         //Muss wieder RAUS
         //CreateBodyPart();
     }
@@ -65,8 +56,18 @@ public class AssemblyLineManager : MonoBehaviour
     {
         foreach (KeyValuePair<string, SwitchData> entry in bodyPartData)
         {
-            currentBuildingBlock.SwitchBodyPartAmount(entry.Key, entry.Value);
-            print($"Switching: {entry.Key} to {entry.Value}");
+            bool isMainBodyPart = entry.Value.bodyPart.ToLower() == "head"
+                || entry.Value.bodyPart.ToLower() == "tail"
+                || entry.Value.bodyPart.ToLower() == "body";
+
+            if ((!isMainBodyPart && entry.Value.buttonData != 0) || entry.Value.bodyPart.ToLower() == step.ToString().ToLower())
+            {
+                if(!isMainBodyPart)
+                {
+                    entry.Value.buttonData--;
+                }
+                currentBuildingBlock.SwitchBodyPartAmount(entry.Key, entry.Value);
+            }
         }
     }
 
@@ -90,6 +91,51 @@ public class AssemblyLineManager : MonoBehaviour
             }
         }
     }
+    public void PrepNewBody()
+    {
+        currentBuildingBlock = Instantiate(bodyPartPrefab, bodyPartPrefab.transform.position, bodyPartPrefab.transform.rotation).GetComponent<BasicBodyPart>();
+    }
+
+    public void ResetMachine()
+    {
+        FillBodyDictionary();
+        BasicSwitch.ResetSwitches();
+    }
+
+    /// <summary>
+    /// Only used by switch events in the editor to reset the machine
+    /// </summary>
+    public void GoToHeadStep()
+    {
+        step = BodyPartStep.Head;
+    }
+
+    public void GoToNextBodyPartStep()
+    {
+        switch (step)
+        {
+            case BodyPartStep.Body:
+                step = BodyPartStep.Tail;
+                break;
+            case BodyPartStep.Head:
+                step = BodyPartStep.Body;
+                break;
+            case BodyPartStep.Tail:
+                Invoke(nameof(ClearSpawnedBodies), 4f);
+                step = BodyPartStep.Head;
+                // end round
+                break;
+        }
+    }
+
+    public void ClearSpawnedBodies()
+    {
+        foreach (GameObject obj in existingBodys)
+        {
+            Destroy(obj);
+        }
+        existingBodys.Clear();
+    }
 
     protected void ChangeState(BasicState bs)
     {
@@ -98,9 +144,17 @@ public class AssemblyLineManager : MonoBehaviour
         currentState.Enter();
     }
 
-    public void PrepNewBody()
+    protected void FillBodyDictionary()
     {
-        currentBuildingBlock = Instantiate(bodyPartPrefab, bodyPartPrefab.transform.position, bodyPartPrefab.transform.rotation).GetComponent<BasicBodyPart>();
+        bodyPartData.Clear();
+        foreach (string part in bodyParts)
+        {
+            SwitchData temp = new SwitchData();
+            temp.singleSelection = true;
+            temp.bodyPart = part;
+            temp.allowedState = "setup";
+            bodyPartData.Add(part, temp);
+        }
     }
 }
 
@@ -116,11 +170,11 @@ public class MyComponentEditor : Editor
         // Draw a text field in the inspector
         if (myComponent.CurrentState != null)
         {
-            EditorGUILayout.TextArea(myComponent.CurrentState.stateName);
+            EditorGUILayout.TextArea(myComponent.CurrentState.stateName + " on: " + myComponent.step.ToString());
         }
         else
         {
-            EditorGUILayout.TextArea("State", "Enter play modus");
+            EditorGUILayout.TextArea("Enter play modus");
         }
 
         DrawDefaultInspector();

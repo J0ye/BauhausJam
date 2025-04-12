@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
 public class BasicBodyPart : MonoBehaviour
 {
     public List<GameObject> bodyParts = new List<GameObject>();
@@ -19,26 +17,21 @@ public class BasicBodyPart : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void SwitchBodyPart(string partName, bool newState)
     {
         if (bodyPartsAndNames.ContainsKey(partName))
         {
-            print($"Switching: {partName}");
             bodyPartsAndNames[partName].SetActive(newState);
         }
     }
+
     public void SwitchBodyPartAmount(string bodyPart, SwitchData value)
     {
+        print($"Switch request for {bodyPart} with data " +
+            $"(bp:{value.bodyPart}, data:{value.buttonData}, target state:{value.allowedState}, single {value.singleSelection.ToString()} )");
         List<GameObject> list = new List<GameObject>();
         foreach (KeyValuePair<string, GameObject> pair in bodyPartsAndNames)
         {
-            print("Checking " + bodyPart.ToLower() + " with " + pair.Key.ToLower());
             if (pair.Key.ToLower().Contains(bodyPart.ToLower()))
             {
                 list.Add(pair.Value);
@@ -55,28 +48,23 @@ public class BasicBodyPart : MonoBehaviour
             gameObject.SetActive(false);
         }
 
-        value.buttonData = Mathf.Clamp(value.buttonData, 0, list.Count);
+        value.buttonData = Mathf.Clamp(value.buttonData, 0, list.Count-1);
 
-        if (value.buttonData != 0)
+
+        if (value.singleSelection)
         {
-            if (value.singleSelection)
+            list[value.buttonData].SetActive(true);
+        }
+        else
+        {
+            for (int i = 0; i <= value.buttonData; i++)
             {
-                list[value.buttonData - 1].SetActive(true);
-            }
-            else
-            {
-                for (int i = 0; i < value.buttonData; i++)
-                {
-                    list[i].SetActive(true);
-                }
+                list[i].SetActive(true);
             }
         }
-
-
     }
-
-
 }
+
 public static class ListExtensions
 {
 
