@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6276710391350441082}
   - component: {fileID: 1376684123743050269}
   m_Layer: 0
-  m_Name: Slider
+  m_Name: Slider 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -183,7 +183,7 @@ Transform:
   m_GameObject: {fileID: 2677609686096031703}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.63, y: -3.74, z: 0}
+  m_LocalPosition: {x: -1.43, y: -5.26, z: 0}
   m_LocalScale: {x: 4.23, y: 4.23, z: 4.23}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -230,7 +230,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 9
-  m_Sprite: {fileID: 21300000, guid: ecb7aa156947e9f45b5f1b3510c9d8ea, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1abd17bf0128e5b4d8d4f504637b2936, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

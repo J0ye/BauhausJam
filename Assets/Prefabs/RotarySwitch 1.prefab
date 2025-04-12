@@ -109,13 +109,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4375501703506365293}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 0.67683214, w: 0.7361374}
-  m_LocalPosition: {x: 0.013, y: 0.006, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 0.7101696, w: 0.70403063}
+  m_LocalPosition: {x: 0.62, y: 1.65, z: 0}
   m_LocalScale: {x: 1.43, y: 1.43, z: 1.43}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 256957923879797680}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 85.193}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90.497}
 --- !u!212 &8881138290200251998
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -157,7 +157,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 9
-  m_Sprite: {fileID: 21300000, guid: 0b2d53bdcdbba004b995c8fb2c011303, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c22e0e72d58448946b78df570b54b21f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 59197243551187581}
   - component: {fileID: 8754075325927857193}
   m_Layer: 0
-  m_Name: RotarySwitch
+  m_Name: RotarySwitch 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
