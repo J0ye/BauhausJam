@@ -6,7 +6,7 @@ using static UnityEngine.EventSystems.EventTrigger;
 
 public class QuestBoardController : MonoBehaviour
 {
-    public List<BasicBodyPart> questDisplay = new List<BasicBodyPart>();
+    public BasicBodyPart questDisplay;
     public List<SwitchData> questData = new List<SwitchData>();
     public Vector3 targetMove = Vector3.up;  
 
@@ -38,10 +38,10 @@ public class QuestBoardController : MonoBehaviour
     protected void SetNewQuest()
     {
         questData.Clear();
-        print("Quests  "+ AssemblyLineManager.instance.bodyParts.Count);
+
         foreach (string bodyPartName in AssemblyLineManager.instance.bodyParts)
         {
-            int maxCount = BasicBodyPart.GetListOfParts(bodyPartName).Count;
+            int maxCount = questDisplay.GetListOfParts(bodyPartName).Count;
             SwitchData randomData = new SwitchData();
             randomData.bodyPart = bodyPartName;
             randomData.buttonData = Random.Range(0, maxCount);
@@ -52,13 +52,10 @@ public class QuestBoardController : MonoBehaviour
 
     protected void SetQuestDisplay()
     {
-        foreach (BasicBodyPart part in questDisplay)
+        questDisplay.DeactivateAll();
+        foreach(SwitchData sd in questData)
         {
-            part.DeactivateAll();
-            foreach(SwitchData sd in questData)
-            {
-                part.SwitchBodyPartAmount(sd);
-            }
+            questDisplay.SwitchBodyPartAmount(sd);
         }
     }
 

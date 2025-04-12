@@ -37,9 +37,7 @@ public class RotarySwitch : BasicSwitch
         data.allowedBodyPartStep = targetStep;
 
 
-        print("Single on is yes and "
-            + AssemblyLineManager.instance.step.ToString().ToLower()
-            + " | " + bodyPartName.ToLower());
+        print("Single on is yes and " + bodyPartName.ToLower());
         onRotate.Invoke(data);
     }
 

@@ -26,9 +26,9 @@ public class BasicState
     public virtual void Exit() { }
 
 
-    protected void MoveCurrentBodyPart(Vector3 target, float time)
+    protected Tween MoveCurrentBodyPart(Vector3 target, float time)
     {
-        assemblyLineManager.currentBuildingBlock.transform.DOMove(target, time);
-
+        Tween ret = assemblyLineManager.currentBuildingBlock.transform.DOMove(target, time);
+        return ret;
     }
 }

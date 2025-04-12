@@ -6,8 +6,7 @@ using System.Globalization;
 using UnityEditor;
 using UnityEngine;
 
-public enum BodyPartStep { Head, Tail, Body}
-
+public enum BodyPartStep { Head, Tail, Body }
 
 public class AssemblyLineManager : MonoBehaviour
 {
@@ -17,10 +16,12 @@ public class AssemblyLineManager : MonoBehaviour
     public List<string> bodyParts = new List<string>();
     public Transform inMachinePoint;
     public Transform endPoint;
-    public BodyPartStep step = BodyPartStep.Head;
+
+    [Header("Machine effects")]
+    public ParticleSystem smoke;
 
     private List<SwitchData> bodyPartData = new List<SwitchData>();
-    
+
     public BasicState CurrentState { get { return currentState; } }
     private BasicState currentState;
 
@@ -63,17 +64,16 @@ public class AssemblyLineManager : MonoBehaviour
             bool isMainBodyPart = entry.bodyPart.ToLower() == "head"
                 || entry.bodyPart.ToLower() == "tail"
                 || entry.bodyPart.ToLower() == "body";
-            
-            if ((!isMainBodyPart && entry.buttonData != 0) || entry.bodyPart.ToLower() == step.ToString().ToLower())
+
+
+            if (!isMainBodyPart && entry.buttonData > 0)
             {
-                if(!isMainBodyPart)
-                {
-                    entry.buttonData--;
-                }
-                if (entry.allowedBodyPartStep == step)
-                {
-                    currentBuildingBlock.SwitchBodyPartAmount(entry);
-                }
+                entry.buttonData--;
+                currentBuildingBlock.SwitchBodyPartAmount(entry);
+            }
+            else if(isMainBodyPart)
+            {
+                currentBuildingBlock.SwitchBodyPartAmount(entry);
             }
         }
     }
@@ -107,32 +107,6 @@ public class AssemblyLineManager : MonoBehaviour
     {
         FillBodyList();
         BasicSwitch.ResetSwitches();
-    }
-
-    /// <summary>
-    /// Only used by switch events in the editor to reset the machine
-    /// </summary>
-    public void GoToHeadStep()
-    {
-        step = BodyPartStep.Head;
-    }
-
-    public void GoToNextBodyPartStep()
-    {
-        switch (step)
-        {
-            case BodyPartStep.Body:
-                step = BodyPartStep.Tail;
-                break;
-            case BodyPartStep.Head:
-                step = BodyPartStep.Body;
-                break;
-            case BodyPartStep.Tail:
-                Invoke(nameof(ClearSpawnedBodies), 4f);
-                step = BodyPartStep.Head;
-                // end round
-                break;
-        }
     }
 
     public void ClearSpawnedBodies()
@@ -177,7 +151,7 @@ public class MyComponentEditor : Editor
         // Draw a text field in the inspector
         if (myComponent.CurrentState != null)
         {
-            EditorGUILayout.TextArea(myComponent.CurrentState.stateName + " on: " + myComponent.step.ToString());
+            EditorGUILayout.TextArea(myComponent.CurrentState.stateName);
         }
         else
         {

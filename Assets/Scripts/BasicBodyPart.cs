@@ -5,15 +5,10 @@ using static UnityEngine.Rendering.DebugUI;
 
 public class BasicBodyPart : MonoBehaviour
 {
-    public static List<GameObject> BodyParts {  get; private set; }
 
     public List<GameObject> bodyParts = new List<GameObject>();
     public Dictionary<string, GameObject> bodyPartsAndNames = new Dictionary<string, GameObject>();
 
-    void Start()
-    {
-        BodyParts = bodyParts;
-    }
 
     public void SwitchBodyPart(string partName, bool newState)
     {
@@ -37,7 +32,7 @@ public class BasicBodyPart : MonoBehaviour
         {
             list.Shuffle();
         }
-        DeactivateAll();
+        //DeactivateAll();
         value.buttonData = Mathf.Clamp(value.buttonData, 0, list.Count - 1);
 
 
@@ -54,10 +49,10 @@ public class BasicBodyPart : MonoBehaviour
         }
     }
 
-    public static List<GameObject> GetListOfParts(string bodyPartName)
+    public List<GameObject> GetListOfParts(string bodyPartName)
     {
         List<GameObject> list = new List<GameObject>();
-        foreach (GameObject gbj in BodyParts)
+        foreach (GameObject gbj in bodyParts)
         {
             if (gbj.name.ToLower().Contains(bodyPartName.ToLower()))
             {

@@ -14,13 +14,13 @@ public class CleanUp : BasicState
 
     public override void Enter()
     {
-        MoveCurrentBodyPart(assemblyLineManager.endPoint.position, 2f);
+        Tween moveToEndOfBelt = MoveCurrentBodyPart(assemblyLineManager.endPoint.position, 2f);
         assemblyLineManager.existingBodys.Add(assemblyLineManager.currentBuildingBlock.gameObject);
-        assemblyLineManager.GoToState("Setup");
+        moveToEndOfBelt.OnComplete(() => assemblyLineManager.GoToState("Setup"));
     }
 
     public override void Exit()
     {
-        assemblyLineManager.GoToNextBodyPartStep();
+        MoveCurrentBodyPart(assemblyLineManager.endPoint.position + Vector3.right * 5, 1f);
     }
 }
