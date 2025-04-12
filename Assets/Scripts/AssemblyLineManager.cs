@@ -59,14 +59,18 @@ public class AssemblyLineManager : MonoBehaviour
             bool isMainBodyPart = entry.Value.bodyPart.ToLower() == "head"
                 || entry.Value.bodyPart.ToLower() == "tail"
                 || entry.Value.bodyPart.ToLower() == "body";
-
+            print(entry.Value.buttonData);
             if ((!isMainBodyPart && entry.Value.buttonData != 0) || entry.Value.bodyPart.ToLower() == step.ToString().ToLower())
             {
+                print("here");
                 if(!isMainBodyPart)
                 {
                     entry.Value.buttonData--;
                 }
-                currentBuildingBlock.SwitchBodyPartAmount(entry.Key, entry.Value);
+                if (entry.Value.allowedBodyPartStep == step)
+                {
+                    currentBuildingBlock.SwitchBodyPartAmount(entry.Key, entry.Value);
+                }
             }
         }
     }

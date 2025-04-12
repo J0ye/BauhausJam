@@ -10,7 +10,7 @@ public class BasicSwitch : MonoBehaviour
 
     protected int clicktAmount = 1;
     public UnityEvent onClick = new UnityEvent();
-
+    public BodyPartStep targetStep = BodyPartStep.Head;
     public string bodyPartName = "";
     public string allowedState = "";
     public bool singleOn = false;

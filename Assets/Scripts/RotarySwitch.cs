@@ -34,6 +34,7 @@ public class RotarySwitch : BasicSwitch
         data.buttonData = i; // 0 if button is back to start
         data.allowedState = allowedState;
         data.singleSelection = singleOn;
+        data.allowedBodyPartStep = targetStep;
 
 
         print("Single on is yes and "

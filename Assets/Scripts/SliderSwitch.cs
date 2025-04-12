@@ -85,6 +85,7 @@ public class SliderSwitch : BasicSwitch
         data.buttonData = buttonState;
         data.allowedState = allowedState;
         data.singleSelection = singleOn;
+        data.allowedBodyPartStep = targetStep;
 
         OnSlide.Invoke(data);
     }
