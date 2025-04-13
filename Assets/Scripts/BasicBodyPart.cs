@@ -10,7 +10,7 @@ public class BasicBodyPart : MonoBehaviour
     public Dictionary<string, GameObject> bodyPartsAndNames = new Dictionary<string, GameObject>();
     public List<SwitchData> switchData {  get; private set; }
 
-    private bool isVeryExtra = false;
+    public bool isVeryExtra = false;
 
 
     public void SwitchBodyPart(string partName, bool newState)

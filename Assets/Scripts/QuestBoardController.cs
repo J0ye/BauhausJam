@@ -59,7 +59,7 @@ public class QuestBoardController : MonoBehaviour
             }
         }
 
-        print("Found: " +  count + " right body parts");
+        print("Found: " +  count + " right body parts and quota is " + GetSwitchDataTargetQuota());
         if (count == GetSwitchDataTargetQuota())
         {
             // There are as many right entries in the quest as there a entries in the build body
@@ -118,6 +118,21 @@ public class QuestBoardController : MonoBehaviour
             }
             randomData.singleSelection = true;
             questData.Add(randomData);
+            
+            if(randomData.bodyPart.ToLower() == "extra" && randomData.buttonData > 0)
+            {
+                print("extra part spawned");
+                foreach(SwitchData q in questData)
+                {
+                    print(q.bodyPart);
+                    if(!q.IsMainPart() && q.bodyPart.ToLower() != "extra")
+                    {
+                        q.buttonData = 0;
+                        print("New quest is extra. resetting: " + q.bodyPart + " to " + q.buttonData);
+                    }
+                }
+                return; // exit because any other data does not matter with extra
+            }
         }
     }
 
@@ -138,6 +153,7 @@ public class QuestBoardController : MonoBehaviour
     protected void SetQuestDisplay()
     {
         questDisplay.DeactivateAll();
+        questDisplay.isVeryExtra = false;
         foreach (SwitchData entry in questData)
         {
             bool isMainBodyPart = entry.IsMainPart();
