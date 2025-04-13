@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Start.unity
     guid: c6f279ff837d2ea4cb87e5d2ea6382a9
   - enabled: 1
+    path: Assets/Scenes/Turorial.unity
+    guid: 759720237da558d42a937dcd1147dddf
+  - enabled: 1
     path: Assets/Scenes/Game.unity
     guid: 376383da6864709438d53a2bf2a6bd42
   m_configObjects: {}
