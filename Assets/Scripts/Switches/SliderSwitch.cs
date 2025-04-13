@@ -29,7 +29,7 @@ public class SliderSwitch : BasicSwitch
         Vector2 clamped = ClampToLine(startPos, startPos + transform.right * sliderSize, mouseWorldPos);
         Vector2 snapped = GetClosesedPosition(GetPossibleSliderPos(), clamped);
         transform.position = new Vector3(snapped.x, snapped.y, transform.position.z);
-        OnSwitch();
+        CallEvent(buttonState);
     }
 
     private void OnMouseUp() { }
@@ -81,12 +81,11 @@ public class SliderSwitch : BasicSwitch
         return ret;
     }
 
-    public void OnSwitch()
+    protected void CallEvent(int i)
     {
         SwitchData data = new SwitchData();
-
         data.bodyPart = bodyPartName;
-        data.buttonData = buttonState;
+        data.buttonData = i;
         data.allowedState = allowedState;
         data.singleSelection = singleOn;
         data.allowedBodyPartStep = targetStep;
@@ -98,5 +97,6 @@ public class SliderSwitch : BasicSwitch
     {
         base.Reset();
         transform.position = startPos; // Move back to where switch started
+        CallEvent(0);
     }
 }

@@ -52,6 +52,36 @@ public class BasicSwitch : MonoBehaviour
         }
     }
 
+    public static void ResetSwitches(bool resetAllSwitches)
+    {
+        if (resetAllSwitches)
+        {
+            ResetSwitches();
+        }
+        else
+        {
+            print("i");
+            // reset only non main part switches
+            foreach (BasicSwitch basicSwitch in _switches)
+            {
+                SwitchData data = new SwitchData();
+                data.bodyPart = basicSwitch.bodyPartName;
+                if(!data.IsMainPart() && data.bodyPart.ToLower() != "extra")
+                {
+                    try
+                    {
+                        basicSwitch.Reset();
+                    }
+                    catch (SystemException e)
+                    {
+                        Debug.LogWarning("Caught error on reseting switches: " + e);
+                    }
+                }                
+            }
+        }
+
+    }
+
     protected virtual void OnClick()
     {
         if (audioSourceOnClick != null)
