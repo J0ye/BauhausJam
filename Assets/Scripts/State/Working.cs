@@ -21,6 +21,7 @@ public class Working : BasicState
         assemblyLineManager.CreateBodyPart();
         assemblyLineManager.ResetMachine();
         StopAllEffects();
+        assemblyLineManager.mashineWorking.Stop();
         DeleteBodyPartBase();
     }
 
@@ -28,6 +29,7 @@ public class Working : BasicState
     {
         Tween moveThroughMachine = MoveCurrentBodyPart(assemblyLineManager.inMachinePoint.position + Vector3.right, assemblyLineManager.machineProcessingTime);
         StartAllEffects();
+        assemblyLineManager.mashineWorking.Play();
         moveThroughMachine.OnComplete(() => assemblyLineManager.GoToState("CleanUp"));
     }
 

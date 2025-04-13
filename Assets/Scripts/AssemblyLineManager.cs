@@ -21,6 +21,7 @@ public class AssemblyLineManager : MonoBehaviour
 
     [Header("Machine effects")]
     public List<ParticleSystem> workingStateParticleEffect;
+    public AudioSource mashineWorking;
 
     private List<SwitchData> bodyPartData = new List<SwitchData>();
 
