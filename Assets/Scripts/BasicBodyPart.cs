@@ -58,20 +58,21 @@ public class BasicBodyPart : MonoBehaviour
         {
             switchData = new List<SwitchData>();
         }
-        switchData.Add(value);
 
         if(value.bodyPart.ToLower() == "extra")
         {
             isVeryExtra = true;
             foreach(SwitchData d in switchData)
             {
-                if(!d.IsMainPart() && d.bodyPart.ToLower() != "extra")
+                if(!d.IsMainPart())
                 {
                     // deactivate everything but the main parts and extra crazy limbs
-                    list[d.buttonData].SetActive(false);
+                    List<GameObject> temp = GetListOfParts(d.bodyPart); 
+                    temp[d.buttonData].SetActive(false);
                 }
             }
         }
+        switchData.Add(value);
     }
 
     public List<GameObject> GetListOfParts(string bodyPartName)
