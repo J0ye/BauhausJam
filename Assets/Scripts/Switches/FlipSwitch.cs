@@ -7,9 +7,11 @@ using UnityEngine.UIElements;
 public class FlipSwitch : BasicSwitch
 {
     public bool flipDownOnStart = false;
+    public int forcedSwitchValue = 1;
     public SwitchEvent onFlip = new SwitchEvent();
 
     protected Vector3 startScale = Vector3.one;
+    protected bool flipState = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,24 +31,38 @@ public class FlipSwitch : BasicSwitch
 
     public virtual void OnFlip()
     {
-        int i = clicktAmount % 2;
+        flipState = !flipState;
+        int i = 0;
+        if (flipState)
+        {
+            i = forcedSwitchValue;
+        }
         FlipAnimation();
 
-        SwitchData data = new SwitchData();
-        data.bodyPart = bodyPartName;
-        data.buttonData = i;
-        data.allowedState = allowedState;
-        data.singleSelection = singleOn;
-        data.allowedBodyPartStep = targetStep;
-
-        print("Flip i is " + i);
-        onFlip.Invoke(data);
+        CallEvent(i);
+        if (isExtra)
+        {
+            ResetSwitches(false); // reset every switch but the main switches
+        }
     }
 
     public override void Reset()
     {
         base.Reset();
-        transform.DOScale(startScale, 0.1f); // Turn to zero
+        if (flipState)
+        {
+            // Only if the lever is down
+            transform.DOScale(startScale, 0.1f);
+            SwitchData data = new SwitchData();
+            data.bodyPart = bodyPartName;
+            data.buttonData = 0;
+            data.allowedState = allowedState;
+            data.singleSelection = singleOn;
+            data.allowedBodyPartStep = targetStep;
+
+            AssemblyLineManager.instance.SetBodyPartDate(data);
+            flipState = !flipState;
+        }
     }
 
     protected void FlipAnimation()
@@ -57,12 +73,23 @@ public class FlipSwitch : BasicSwitch
 
     protected override void OnClick()
     {
-
         if (audioSourceOnClick != null)
         {
             float duration = audioSourceOnClick.clip.length;
             StartAudio();
             Invoke(nameof(StopAudio), duration);
         }
+    }
+
+    protected void CallEvent(int i)
+    {
+        SwitchData data = new SwitchData();
+        data.bodyPart = bodyPartName;
+        data.buttonData = i;
+        data.allowedState = allowedState;
+        data.singleSelection = singleOn;
+        data.allowedBodyPartStep = targetStep;
+        print("Flip event called with " + i);
+        onFlip.Invoke(data);
     }
 }
