@@ -26,7 +26,9 @@ public class CleanUp : BasicState
 
     public void SittingStill()
     {
-
+        
+        assemblyLineManager.wormSound.clip = assemblyLineManager.wormAudio[GetWeightedRandomInt(assemblyLineManager.gewichteteWarscheinlichkeitAudio)];
+        assemblyLineManager.wormSound.Play();
         assemblyLineManager.GoToState("Setup");
     }
 
@@ -47,8 +49,47 @@ public class CleanUp : BasicState
         else
         {
             // Move to the right of the screen
-            MoveCurrentBodyPart(assemblyLineManager.endPoint.position + Vector3.right * 5, 1f);
+            MoveCurrentBodyPart(assemblyLineManager.endPoint.position + Vector3.right * 5, 5f);
         }
 
     }
+
+    public int GetWeightedRandomInt(float weightForHighNumbers)
+    {
+
+        // Interner Bias-Wert: >1 = 4-6 häufiger, <1 = 4-6 seltener
+        float biasForHighNumbers = 2.0f;
+
+        // Gewichte für 0 bis 6
+        float[] weights = new float[]
+        {
+        1f, // 0
+        1f, // 1
+        1f, // 2
+        1f, // 3
+        1f * biasForHighNumbers, // 4
+        1f * biasForHighNumbers, // 5
+        1f * biasForHighNumbers  // 6
+        };
+
+        // Gesamtgewicht berechnen
+        float totalWeight = 0f;
+        foreach (float w in weights)
+            totalWeight += w;
+
+        // Zufallswert im Bereich des Gesamtgewichts
+        float randomValue = UnityEngine.Random.Range(0f, totalWeight);
+        float cumulative = 0f;
+
+        // Wähle Zahl basierend auf Gewicht
+        for (int i = 0; i < weights.Length; i++)
+        {
+            cumulative += weights[i];
+            if (randomValue < cumulative)
+                return i;
+        }
+
+        return 0; // Fallback (eigentlich nie erreicht)
+    }
+
 }
