@@ -20,7 +20,14 @@ public class CleanUp : BasicState
         assemblyLineManager.existingBodys.Add(assemblyLineManager.currentBuildingBlock.gameObject);
         questResult = QuestBoardController.Instance.CompareWithQuest(assemblyLineManager.currentBuildingBlock);
         Debug.Log("And the result is: " + questResult);
-        moveToEndOfBelt.OnComplete(() => assemblyLineManager.GoToState("Setup"));
+
+        moveToEndOfBelt.OnComplete(() => SittingStill());
+    }
+
+    public void SittingStill()
+    {
+
+        assemblyLineManager.GoToState("Setup");
     }
 
     public override void Exit()
