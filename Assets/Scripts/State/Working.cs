@@ -12,7 +12,7 @@ public class Working : BasicState
 
     public override void Enter()
     {
-        Tween moveIntoMachine = MoveCurrentBodyPart(assemblyLineManager.inMachinePoint.position, 2f);
+        Tween moveIntoMachine = MoveCurrentBodyPart(assemblyLineManager.inMachinePoint.position, 1f);
         moveIntoMachine.OnComplete(() => InMachineDelegate());
     }
 
@@ -26,7 +26,7 @@ public class Working : BasicState
 
     private void InMachineDelegate()
     {
-        Tween moveThroughMachine = MoveCurrentBodyPart(assemblyLineManager.inMachinePoint.position + Vector3.right, 5f);
+        Tween moveThroughMachine = MoveCurrentBodyPart(assemblyLineManager.inMachinePoint.position + Vector3.right, assemblyLineManager.machineProcessingTime);
         assemblyLineManager.smoke.Play();
         moveThroughMachine.OnComplete(() => assemblyLineManager.GoToState("CleanUp"));
     }

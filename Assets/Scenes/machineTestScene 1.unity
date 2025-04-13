@@ -192,6 +192,7 @@ MonoBehaviour:
   - Antenna
   inMachinePoint: {fileID: 27404427}
   endPoint: {fileID: 1397015344}
+  machineProcessingTime: 2
   smoke: {fileID: 785395049}
 --- !u!4 &38652813
 Transform:
@@ -6238,7 +6239,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7064670716472251172, guid: 779a6b64b3af0124c9c6511700baf4df, type: 3}
       propertyPath: onClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7064670716472251172, guid: 779a6b64b3af0124c9c6511700baf4df, type: 3}
       propertyPath: onClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -6250,7 +6251,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7064670716472251172, guid: 779a6b64b3af0124c9c6511700baf4df, type: 3}
       propertyPath: onClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: GoToState
+      value: StartMachine
       objectReference: {fileID: 0}
     - target: {fileID: 7064670716472251172, guid: 779a6b64b3af0124c9c6511700baf4df, type: 3}
       propertyPath: onClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName

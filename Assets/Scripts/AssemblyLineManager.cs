@@ -16,6 +16,8 @@ public class AssemblyLineManager : MonoBehaviour
     public List<string> bodyParts = new List<string>();
     public Transform inMachinePoint;
     public Transform endPoint;
+    [Tooltip("Used for the duration of the animation throuhg the machine")]
+    public float machineProcessingTime = 3f;
 
     [Header("Machine effects")]
     public ParticleSystem smoke;
@@ -75,6 +77,14 @@ public class AssemblyLineManager : MonoBehaviour
             {
                 currentBuildingBlock.SwitchBodyPartAmount(entry);
             }
+        }
+    }
+
+    public void StartMachine()
+    {
+        if(currentState.stateName.ToLower() == "setup")
+        {
+            GoToState("Working");
         }
     }
 
