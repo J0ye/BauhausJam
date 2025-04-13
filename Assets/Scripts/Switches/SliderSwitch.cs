@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -30,6 +31,8 @@ public class SliderSwitch : BasicSwitch
         transform.position = new Vector3(snapped.x, snapped.y, transform.position.z);
         OnSwitch();
     }
+
+    private void OnMouseUp() { }
 
     Vector2 ClampToLine(Vector2 pointA, Vector2 pointB, Vector2 targetPosition)
     {

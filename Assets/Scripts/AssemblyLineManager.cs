@@ -22,6 +22,9 @@ public class AssemblyLineManager : MonoBehaviour
     [Header("Machine effects")]
     public List<ParticleSystem> workingStateParticleEffect;
     public AudioSource mashineWorking;
+    public AudioSource wormSound;
+    public List<AudioClip> wormAudio = new List<AudioClip>();
+    public float gewichteteWarscheinlichkeitAudio = 1f;
 
     private List<SwitchData> bodyPartData = new List<SwitchData>();
 
