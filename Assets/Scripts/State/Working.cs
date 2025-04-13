@@ -20,16 +20,33 @@ public class Working : BasicState
     {
         assemblyLineManager.CreateBodyPart();
         assemblyLineManager.ResetMachine();
-        assemblyLineManager.smoke.Stop();
+        StopAllEffects();
         DeleteBodyPartBase();
     }
 
     private void InMachineDelegate()
     {
         Tween moveThroughMachine = MoveCurrentBodyPart(assemblyLineManager.inMachinePoint.position + Vector3.right, assemblyLineManager.machineProcessingTime);
-        assemblyLineManager.smoke.Play();
+        StartAllEffects();
         moveThroughMachine.OnComplete(() => assemblyLineManager.GoToState("CleanUp"));
     }
+
+    private void StartAllEffects()
+    {
+        foreach (ParticleSystem eff in assemblyLineManager.workingStateParticleEffect)
+        {
+            eff.Play();
+        }
+    }
+
+    private void StopAllEffects()
+    {
+        foreach (ParticleSystem eff in assemblyLineManager.workingStateParticleEffect)
+        {
+            eff.Stop();
+        }
+    }
+
 
     private void DeleteBodyPartBase()
     {

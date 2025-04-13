@@ -18,6 +18,7 @@ public class SliderSwitch : BasicSwitch
     private void Start()
     {
         startPos = transform.position;
+        clickIntensity = new Vector3(0.8f, 0.8f, 0.8f);
     }
 
     private void OnMouseDrag()

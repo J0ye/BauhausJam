@@ -8,8 +8,10 @@ public class Setup : BasicState
     {
         stateName = nameof(Setup);
     }
+
     public override void Enter()
     {
         assemblyLineManager.PrepNewBody();
+        MoveCurrentBodyPart(assemblyLineManager.bodyPartPrefab.transform.position, 1f);
     }
 }

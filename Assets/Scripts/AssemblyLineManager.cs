@@ -20,7 +20,7 @@ public class AssemblyLineManager : MonoBehaviour
     public float machineProcessingTime = 3f;
 
     [Header("Machine effects")]
-    public ParticleSystem smoke;
+    public List<ParticleSystem> workingStateParticleEffect;
 
     private List<SwitchData> bodyPartData = new List<SwitchData>();
 
@@ -110,7 +110,8 @@ public class AssemblyLineManager : MonoBehaviour
     }
     public void PrepNewBody()
     {
-        currentBuildingBlock = Instantiate(bodyPartPrefab, bodyPartPrefab.transform.position, bodyPartPrefab.transform.rotation).GetComponent<BasicBodyPart>();
+        Vector3 offsetToOffscreen = Vector3.right * -2;
+        currentBuildingBlock = Instantiate(bodyPartPrefab, bodyPartPrefab.transform.position + offsetToOffscreen, bodyPartPrefab.transform.rotation).GetComponent<BasicBodyPart>();
     }
 
     public void ResetMachine()

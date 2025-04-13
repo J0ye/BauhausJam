@@ -16,7 +16,7 @@ public class CleanUp : BasicState
 
     public override void Enter()
     {
-        Tween moveToEndOfBelt = MoveCurrentBodyPart(assemblyLineManager.endPoint.position, 1f);
+        Tween moveToEndOfBelt = MoveCurrentBodyPart(assemblyLineManager.endPoint.position, 3f);
         assemblyLineManager.existingBodys.Add(assemblyLineManager.currentBuildingBlock.gameObject);
         questResult = QuestBoardController.Instance.CompareWithQuest(assemblyLineManager.currentBuildingBlock);
         Debug.Log("And the result is: " + questResult);

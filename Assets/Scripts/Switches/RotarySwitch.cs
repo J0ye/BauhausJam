@@ -17,12 +17,12 @@ public class RotarySwitch : BasicSwitch
     public int turnAmount = 3;
 
     // Start is called before the first frame update
-    void Start()
+    protected void Start()
     {
         onClick.AddListener(OnSwitch);
     }
 
-    public void OnSwitch()
+    public virtual void OnSwitch()
     {
         int degrees = 360 / turnAmount;
         int i = clicktAmount % turnAmount;
@@ -36,8 +36,6 @@ public class RotarySwitch : BasicSwitch
         data.singleSelection = singleOn;
         data.allowedBodyPartStep = targetStep;
 
-
-        print("Single on is yes and " + bodyPartName.ToLower());
         onRotate.Invoke(data);
     }
 
@@ -45,7 +43,5 @@ public class RotarySwitch : BasicSwitch
     {
         base.Reset();
         transform.DORotate(new Vector3(0, 0, 0), 0.1f); // Turn to zero
-        /*SwitchData data = new SwitchData();
-        onRotate.Invoke(data); // Invoke Event with empty data*/
     }
 }

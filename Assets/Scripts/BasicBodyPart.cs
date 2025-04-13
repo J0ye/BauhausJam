@@ -80,7 +80,6 @@ public class BasicBodyPart : MonoBehaviour
 
 public static class ListExtensions
 {
-
     public static void Shuffle<T>(this IList<T> list)
     {
         int n = list.Count;
