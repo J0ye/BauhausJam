@@ -10,6 +10,8 @@ public class BasicBodyPart : MonoBehaviour
     public Dictionary<string, GameObject> bodyPartsAndNames = new Dictionary<string, GameObject>();
     public List<SwitchData> switchData {  get; private set; }
 
+    private bool isVeryExtra = false;
+
 
     public void SwitchBodyPart(string partName, bool newState)
     {
@@ -36,16 +38,19 @@ public class BasicBodyPart : MonoBehaviour
         //DeactivateAll();
         value.buttonData = Mathf.Clamp(value.buttonData, 0, list.Count - 1);
 
-
-        if (value.singleSelection)
+        if (!isVeryExtra)
         {
-            list[value.buttonData].SetActive(true);
-        }
-        else
-        {
-            for (int i = 0; i <= value.buttonData; i++)
+            // Only manage bodyparts if the egg isnt with extra parts
+            if (value.singleSelection)
             {
-                list[i].SetActive(true);
+                list[value.buttonData].SetActive(true);
+            }
+            else
+            {
+                for (int i = 0; i <= value.buttonData; i++)
+                {
+                    list[i].SetActive(true);
+                }
             }
         }
 
@@ -54,6 +59,19 @@ public class BasicBodyPart : MonoBehaviour
             switchData = new List<SwitchData>();
         }
         switchData.Add(value);
+
+        if(value.bodyPart.ToLower() == "extra")
+        {
+            isVeryExtra = true;
+            foreach(SwitchData d in switchData)
+            {
+                if(!d.IsMainPart() && d.bodyPart.ToLower() != "extra")
+                {
+                    // deactivate everything but the main parts and extra crazy limbs
+                    list[d.buttonData].SetActive(false);
+                }
+            }
+        }
     }
 
     public List<GameObject> GetListOfParts(string bodyPartName)

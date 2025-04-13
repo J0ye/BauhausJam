@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
 
 [System.Serializable]
 public class SwitchData {
@@ -18,5 +19,14 @@ public class SwitchData {
         allowedState = string.Empty;
         singleSelection = false;
         allowedBodyPartStep = BodyPartStep.Head;
+    }
+
+    public bool IsMainPart()
+    {
+        bool isMainBodyPart = bodyPart.ToLower() == "head"
+        || bodyPart.ToLower() == "tail"
+        || bodyPart.ToLower() == "body";
+
+        return isMainBodyPart;
     }
 }

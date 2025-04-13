@@ -33,8 +33,7 @@ public class QuestBoardController : MonoBehaviour
     private void Start()
     {
         startPos = transform.position;
-        SetNewQuest();
-        SetQuestDisplay();
+        CallNewQuest();
 
         if (resultText != null)
         {
@@ -61,7 +60,7 @@ public class QuestBoardController : MonoBehaviour
         }
 
         print("Found: " +  count + " right body parts");
-        if (count == buildBody.switchData.Count)
+        if (count == GetSwitchDataTargetQuota())
         {
             // There are as many right entries in the quest as there a entries in the build body
             filledQuestCounter++;
@@ -75,6 +74,12 @@ public class QuestBoardController : MonoBehaviour
         {
             return false;
         }
+    }
+
+    public void CallNewQuest()
+    {
+        SetNewQuest();
+        SetQuestDisplay();
     }
 
     private void OnMouseEnter()
@@ -102,18 +107,50 @@ public class QuestBoardController : MonoBehaviour
             int maxCount = questDisplay.GetListOfParts(bodyPartName).Count;
             SwitchData randomData = new SwitchData();
             randomData.bodyPart = bodyPartName;
-            randomData.buttonData = Random.Range(0, maxCount);
+            if(randomData.IsMainPart())
+            {
+                randomData.buttonData = Random.Range(0, maxCount);
+            }
+            else
+            {
+                // use one more beacuse 0 is blocked for No
+                randomData.buttonData = Random.Range(0, maxCount+1);
+            }
             randomData.singleSelection = true;
             questData.Add(randomData);
         }
     }
 
+    protected int GetSwitchDataTargetQuota()
+    {
+        int count = 0;
+        foreach(SwitchData data in questData)
+        {
+            if (data.IsMainPart() || data.buttonData > 0)
+            {
+                count++;
+            }
+        }
+
+        return count;   
+    }
+
     protected void SetQuestDisplay()
     {
         questDisplay.DeactivateAll();
-        foreach (SwitchData sd in questData)
+        foreach (SwitchData entry in questData)
         {
-            questDisplay.SwitchBodyPartAmount(sd);
+            bool isMainBodyPart = entry.IsMainPart();
+
+            if (!isMainBodyPart && entry.buttonData > 0)
+            {
+                entry.buttonData--;
+                questDisplay.SwitchBodyPartAmount(entry);
+            }
+            else if (isMainBodyPart)
+            {
+                questDisplay.SwitchBodyPartAmount(entry);
+            }
         }
     }
 

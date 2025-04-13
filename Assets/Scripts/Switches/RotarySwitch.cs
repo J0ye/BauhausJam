@@ -8,8 +8,6 @@ using UnityEngine.Events;
 [System.Serializable]
 public class SwitchEvent : UnityEvent<SwitchData> { }
 
-
-
 public class RotarySwitch : BasicSwitch
 {
     public SwitchEvent onRotate = new SwitchEvent();

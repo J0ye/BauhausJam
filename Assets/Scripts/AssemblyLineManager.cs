@@ -64,9 +64,7 @@ public class AssemblyLineManager : MonoBehaviour
     {
         foreach (SwitchData entry in bodyPartData)
         {
-            bool isMainBodyPart = entry.bodyPart.ToLower() == "head"
-                || entry.bodyPart.ToLower() == "tail"
-                || entry.bodyPart.ToLower() == "body";
+            bool isMainBodyPart = entry.IsMainPart();
 
 
             if (!isMainBodyPart && entry.buttonData > 0)
