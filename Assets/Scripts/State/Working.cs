@@ -59,6 +59,11 @@ public class Working : BasicState
                 MonoBehaviour.Destroy(c.gameObject);
             }
         }
+
+        if(assemblyLineManager.currentBuildingBlock.TryGetComponent<Animator>(out Animator temp))
+        {
+            MonoBehaviour.Destroy(temp);
+        }
     }
 }
 
