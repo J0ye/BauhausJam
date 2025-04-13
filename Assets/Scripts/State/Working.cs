@@ -64,6 +64,11 @@ public class Working : BasicState
         {
             MonoBehaviour.Destroy(temp);
         }
+        if (assemblyLineManager.currentBuildingBlock.TryGetComponent<SpriteRenderer>(out SpriteRenderer temp2))
+        {
+            MonoBehaviour.Destroy(temp2);
+        }
+
     }
 }
 

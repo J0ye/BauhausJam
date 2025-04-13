@@ -11,7 +11,7 @@ public class SwitchEvent : UnityEvent<SwitchData> { }
 public class RotarySwitch : BasicSwitch
 {
     public SwitchEvent onRotate = new SwitchEvent();
-
+    public bool isExtra = false;
     public int turnAmount = 3;
 
     // Start is called before the first frame update
@@ -26,7 +26,22 @@ public class RotarySwitch : BasicSwitch
         int i = clicktAmount % turnAmount;
 
         transform.DORotate(new Vector3(0, 0, degrees * -i), 0.1f);
+        CallEvent(i);
+        if(isExtra)
+        {
+            ResetSwitches(false); // reset every switch but the main switches
+        }
+    }
 
+    public override void Reset()
+    {
+        base.Reset();
+        transform.DORotate(new Vector3(0, 0, 0), 0.1f); // Turn to zero
+        CallEvent(0);
+    }
+
+    protected void CallEvent(int i)
+    {
         SwitchData data = new SwitchData();
         data.bodyPart = bodyPartName;
         data.buttonData = i; // 0 if button is back to start
@@ -35,11 +50,5 @@ public class RotarySwitch : BasicSwitch
         data.allowedBodyPartStep = targetStep;
 
         onRotate.Invoke(data);
-    }
-
-    public override void Reset()
-    {
-        base.Reset();
-        transform.DORotate(new Vector3(0, 0, 0), 0.1f); // Turn to zero
     }
 }
