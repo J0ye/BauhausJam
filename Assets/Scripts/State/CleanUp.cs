@@ -35,6 +35,7 @@ public class CleanUp : BasicState
             MoveCurrentBodyPart(targetPos, 4f);
             //assemblyLineManager.currentBuildingBlock.transform.DOLookAt(new Vector3(0, 0, angle), 0.1f);
             assemblyLineManager.currentBuildingBlock.transform.DOShakeScale(4f);
+            QuestBoardController.Instance.CallNewQuest();
         }
         else
         {
