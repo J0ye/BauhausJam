@@ -14,11 +14,13 @@ public class BasicSwitch : MonoBehaviour
     public string bodyPartName = "";
     public string allowedState = "";
     public bool singleOn = false;
+    public bool isExtra = false;
 
     protected AudioSource audioSourceOnClick;
     protected Tween clickAnimation;
     protected Vector3 clickIntensity = new Vector3(0.2f, 0.2f, 0.2f);
     protected int clicktAmount = 1;
+    
 
     protected void Awake()
     {
@@ -60,7 +62,6 @@ public class BasicSwitch : MonoBehaviour
         }
         else
         {
-            print("i");
             // reset only non main part switches
             foreach (BasicSwitch basicSwitch in _switches)
             {

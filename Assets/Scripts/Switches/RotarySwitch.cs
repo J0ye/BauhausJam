@@ -11,7 +11,6 @@ public class SwitchEvent : UnityEvent<SwitchData> { }
 public class RotarySwitch : BasicSwitch
 {
     public SwitchEvent onRotate = new SwitchEvent();
-    public bool isExtra = false;
     public int turnAmount = 3;
 
     // Start is called before the first frame update
