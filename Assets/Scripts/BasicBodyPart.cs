@@ -8,6 +8,7 @@ public class BasicBodyPart : MonoBehaviour
 
     public List<GameObject> bodyParts = new List<GameObject>();
     public Dictionary<string, GameObject> bodyPartsAndNames = new Dictionary<string, GameObject>();
+    public List<SwitchData> switchData {  get; private set; }
 
 
     public void SwitchBodyPart(string partName, bool newState)
@@ -47,6 +48,12 @@ public class BasicBodyPart : MonoBehaviour
                 list[i].SetActive(true);
             }
         }
+
+        if(switchData == null)
+        {
+            switchData = new List<SwitchData>();
+        }
+        switchData.Add(value);
     }
 
     public List<GameObject> GetListOfParts(string bodyPartName)
