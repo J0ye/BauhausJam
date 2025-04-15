@@ -60,7 +60,7 @@ public class QuestBoardController : MonoBehaviour
         }
 
         print("Found: " +  count + " right body parts and quota is " + GetSwitchDataTargetQuota());
-        if (count == GetSwitchDataTargetQuota())
+        if (count >= GetSwitchDataTargetQuota())
         {
             // There are as many right entries in the quest as there a entries in the build body
             filledQuestCounter++;

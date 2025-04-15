@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
@@ -26,8 +27,6 @@ public class BasicBodyPart : MonoBehaviour
 
     public void SwitchBodyPartAmount(SwitchData value)
     {
-        print($"Switch request for data (bp:{value.bodyPart}, data:{value.buttonData}, " +
-            $"target state:{value.allowedState}, single {value.singleSelection.ToString()} )");
 
         List<GameObject> list = GetListOfParts(value.bodyPart);
 
@@ -37,6 +36,8 @@ public class BasicBodyPart : MonoBehaviour
         }
         //DeactivateAll();
         value.buttonData = Mathf.Clamp(value.buttonData, 0, list.Count - 1);
+        print($"Switch request for data (bp:{value.bodyPart}, data:{value.buttonData}, " +
+            $"extra: {isVeryExtra}, able body parts {list.Count})");
 
         if (!isVeryExtra)
         {
@@ -59,12 +60,12 @@ public class BasicBodyPart : MonoBehaviour
             switchData = new List<SwitchData>();
         }
 
-        if(value.bodyPart.ToLower() == "extra")
+        if(value.bodyPart.ToLower() == "extra" && value.buttonData > 0)
         {
             isVeryExtra = true;
             foreach(SwitchData d in switchData)
             {
-                if(!d.IsMainPart())
+                if(!d.IsMainPart() && d.bodyPart.ToLower() != "extra")
                 {
                     // deactivate everything but the main parts and extra crazy limbs
                     List<GameObject> temp = GetListOfParts(d.bodyPart); 
@@ -72,6 +73,16 @@ public class BasicBodyPart : MonoBehaviour
                 }
             }
         }
+
+        for (int i = switchData.Count-1; i >= 0; i--) 
+        {
+            if (switchData[i].bodyPart.ToLower() == value.bodyPart.ToLower())
+            {
+                switchData[i] = value;
+                return;
+            }
+        }
+
         switchData.Add(value);
     }
 
