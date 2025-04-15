@@ -434,7 +434,6 @@ GameObject:
   - component: {fileID: 79085621}
   - component: {fileID: 79085622}
   - component: {fileID: 79085623}
-  - component: {fileID: 79085624}
   m_Layer: 0
   m_Name: Board
   m_TagString: Untagged
@@ -521,33 +520,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 27.181225, y: 9.038416}
   m_EdgeRadius: 0
---- !u!114 &79085624
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 79085620}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62f4baa3ff59e974eb21b5157d372603, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onAnyButton:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 79085622}
-        m_TargetAssemblyTypeName: QuestBoardController, Assembly-CSharp
-        m_MethodName: CallNewQuest
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &162173012 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5533847945678333730, guid: 62734c4200c0462448c516e602c9216e, type: 3}
